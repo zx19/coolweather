@@ -2,6 +2,8 @@ package zx.android.coolweather.com.coolweather.util;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,6 +11,7 @@ import org.json.JSONObject;
 import zx.android.coolweather.com.coolweather.db.City;
 import zx.android.coolweather.com.coolweather.db.Country;
 import zx.android.coolweather.com.coolweather.db.Province;
+import zx.android.coolweather.com.coolweather.gson.Weather;
 
 /**
  * Created by xizhang on 2019/5/28.
@@ -79,5 +82,16 @@ public class Utility {
             }
         }
         return false;
+    }
+    public static Weather handleWeatherResponse(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent, Weather.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
